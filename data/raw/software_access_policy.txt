@@ -1,0 +1,47 @@
+Enterprise Knowledge Intelligence Corp.
+Document ID: IT-POL-001
+Department: Information Technology
+Document Type: Policy
+Version: 2.4
+Effective Date: 2026-02-15
+Access Level: Internal
+
+SOFTWARE AND SYSTEM ACCESS POLICY
+
+1. PURPOSE
+
+This policy defines requirements for requesting, granting, reviewing, and removing access to company software and information systems.
+
+2. ACCESS REQUESTS
+
+Employees requiring access to a company system must submit an approved access request.
+
+The request must identify the business need, requested system, and required permission level.
+
+3. MANAGER APPROVAL
+
+System access requests require approval from the employee's manager.
+
+Access to privileged administrative systems may require additional approval from Information Security or the system owner.
+
+4. LEAST PRIVILEGE
+
+Employees must receive only the minimum system permissions necessary to perform their assigned responsibilities.
+
+Elevated permissions should not be granted when standard user permissions are sufficient.
+
+5. ACCESS REVIEWS
+
+System owners must periodically review user access to sensitive systems.
+
+Access that is no longer required must be removed.
+
+6. EMPLOYEE TRANSFERS
+
+When an employee changes roles or departments, system permissions must be reviewed and adjusted to match the employee's new responsibilities.
+
+7. TERMINATION
+
+Access to company systems must be disabled promptly when an employee's employment ends.
+
+Privileged credentials and company-owned authentication devices must be returned or revoked according to company procedures.

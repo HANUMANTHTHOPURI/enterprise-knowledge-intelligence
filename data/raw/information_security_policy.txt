@@ -1,0 +1,49 @@
+Enterprise Knowledge Intelligence Corp.
+Document ID: SEC-POL-001
+Department: Information Security
+Document Type: Policy
+Version: 3.2
+Effective Date: 2026-02-01
+Access Level: Internal
+
+INFORMATION SECURITY POLICY
+
+1. PURPOSE
+
+This policy defines security requirements for employees accessing company systems, applications, and confidential information.
+
+2. AUTHENTICATION
+
+Employees must use company-approved authentication mechanisms when accessing corporate systems.
+
+Multi-factor authentication is required for remote access, administrative accounts, and systems containing confidential information.
+
+Employees must not share passwords or authentication credentials with other individuals.
+
+3. COMPANY DEVICES
+
+Confidential company information must be accessed using company-approved devices unless an exception has been authorized by Information Security.
+
+Devices must have supported operating systems, current security updates, endpoint protection, and disk encryption enabled.
+
+4. REMOTE ACCESS
+
+Remote access to internal company systems must use company-approved secure connections.
+
+Employees must not access confidential systems using unsecured public Wi-Fi unless connected through the approved corporate VPN.
+
+5. SECURITY INCIDENTS
+
+Suspected phishing, credential theft, malware infections, lost company devices, or unauthorized access must be reported to the Information Security team as soon as possible.
+
+Employees should not attempt to independently investigate or remediate a suspected security incident unless instructed by Information Security.
+
+6. DATA HANDLING
+
+Confidential information must only be stored in approved company systems.
+
+Employees must not transfer confidential company data to personal email accounts, personal cloud-storage services, or unauthorized external devices.
+
+7. POLICY REVIEW
+
+Information Security reviews this policy annually and following significant changes to the company's technology or threat environment.
