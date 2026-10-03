@@ -202,4 +202,4 @@ def test_oversized_chunks_preserve_overlap():
     first_tail = set(first_body.split()[-10:])
     second_start = set(second_body.split()[:10])
 
-    assert first_tail.intersection(second_start)
+    assert first_tail.intersection(second_start)    

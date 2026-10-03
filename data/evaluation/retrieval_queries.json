@@ -1,0 +1,81 @@
+[
+  {
+    "query_id": "Q001",
+    "query": "How many days can an eligible employee work from home each week?",
+    "relevant_chunk_ids": ["HR-POL-001::chunk-0002"]
+  },
+  {
+    "query_id": "Q002",
+    "query": "Who has to approve my hybrid work request?",
+    "relevant_chunk_ids": ["HR-POL-001::chunk-0003"]
+  },
+  {
+    "query_id": "Q003",
+    "query": "Can I work from another country without getting permission first?",
+    "relevant_chunk_ids": ["HR-POL-001::chunk-0005"]
+  },
+
+  {
+    "query_id": "Q004",
+    "query": "Is multi-factor authentication required when I connect remotely?",
+    "relevant_chunk_ids": ["SEC-POL-001::chunk-0001"]
+  },
+  {
+    "query_id": "Q005",
+    "query": "Can I connect to confidential company systems from public Wi-Fi?",
+    "relevant_chunk_ids": ["SEC-POL-001::chunk-0003"]
+  },
+  {
+    "query_id": "Q006",
+    "query": "Where am I allowed to store confidential company information?",
+    "relevant_chunk_ids": ["SEC-POL-001::chunk-0005"]
+  },
+
+  {
+    "query_id": "Q007",
+    "query": "Do I need approval before booking a business trip?",
+    "relevant_chunk_ids": ["FIN-POL-001::chunk-0001"]
+  },
+  {
+    "query_id": "Q008",
+    "query": "Can I fly business class on a company trip?",
+    "relevant_chunk_ids": ["FIN-POL-001::chunk-0002"]
+  },
+  {
+    "query_id": "Q009",
+    "query": "How long do I have to submit expenses after returning from travel?",
+    "relevant_chunk_ids": ["FIN-POL-001::chunk-0005"]
+  },
+
+  {
+    "query_id": "Q010",
+    "query": "What permissions should employees receive when they are given system access?",
+    "relevant_chunk_ids": ["IT-POL-001::chunk-0003"]
+  },
+  {
+    "query_id": "Q011",
+    "query": "What happens to permissions when an employee moves to another department?",
+    "relevant_chunk_ids": ["IT-POL-001::chunk-0005"]
+  },
+  {
+    "query_id": "Q012",
+    "query": "When should an employee's system access be disabled after they leave the company?",
+    "relevant_chunk_ids": ["IT-POL-001::chunk-0006"]
+  },
+
+  {
+    "query_id": "Q013",
+    "query": "Can I delete a record after its normal retention period if Legal placed it on hold?",
+    "relevant_chunk_ids": ["LEG-POL-001::chunk-0003"]
+  },
+  {
+    "query_id": "Q014",
+    "query": "When can duplicate or temporary business information be deleted?",
+    "relevant_chunk_ids": ["LEG-POL-001::chunk-0004"]
+  },
+  {
+    "query_id": "Q015",
+    "query": "How should confidential records be destroyed when their retention period ends?",
+    "relevant_chunk_ids": ["LEG-POL-001::chunk-0005"]
+  }
+]

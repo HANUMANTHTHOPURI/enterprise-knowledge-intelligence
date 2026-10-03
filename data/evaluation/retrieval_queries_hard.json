@@ -1,0 +1,95 @@
+[
+  {
+    "query_id": "H001",
+    "query": "I want to spend most of the week at home. What is the maximum remote schedule allowed?",
+    "relevant_chunk_ids": ["HR-POL-001::chunk-0002"]
+  },
+  {
+    "query_id": "H002",
+    "query": "My manager said I can work hybrid. Is that enough to make the arrangement official?",
+    "relevant_chunk_ids": ["HR-POL-001::chunk-0003"]
+  },
+  {
+    "query_id": "H003",
+    "query": "I am traveling abroad and want to continue working while I am there. Who needs to authorize that?",
+    "relevant_chunk_ids": ["HR-POL-001::chunk-0005"]
+  },
+  {
+    "query_id": "H004",
+    "query": "I lost the laptop that I use for work. Who should I contact?",
+    "relevant_chunk_ids": ["SEC-POL-001::chunk-0004"]
+  },
+  {
+    "query_id": "H005",
+    "query": "I am at an airport and need to open sensitive internal systems. Is the wireless network acceptable?",
+    "relevant_chunk_ids": ["SEC-POL-001::chunk-0003"]
+  },
+  {
+    "query_id": "H006",
+    "query": "Can I send company confidential files to my personal cloud drive so I can work on them later?",
+    "relevant_chunk_ids": ["SEC-POL-001::chunk-0005"]
+  },
+  {
+    "query_id": "H007",
+    "query": "I found a flight upgrade that would make a long work trip easier. Can the company pay for it?",
+    "relevant_chunk_ids": ["FIN-POL-001::chunk-0002"]
+  },
+  {
+    "query_id": "H008",
+    "query": "I returned from a client trip several weeks ago. Is there a deadline for filing reimbursement?",
+    "relevant_chunk_ids": ["FIN-POL-001::chunk-0005"]
+  },
+  {
+    "query_id": "H009",
+    "query": "Will the company reimburse drinks or entertainment during business travel?",
+    "relevant_chunk_ids": [
+      "FIN-POL-001::chunk-0004",
+      "FIN-POL-001::chunk-0006"
+    ]
+  },
+  {
+    "query_id": "H010",
+    "query": "An engineer says they need administrator rights even though regular access would work. What principle applies?",
+    "relevant_chunk_ids": ["IT-POL-001::chunk-0003"]
+  },
+  {
+    "query_id": "H011",
+    "query": "Someone changed teams yesterday. Should their old application permissions remain unchanged?",
+    "relevant_chunk_ids": ["IT-POL-001::chunk-0005"]
+  },
+  {
+    "query_id": "H012",
+    "query": "A person's employment has ended. What should happen to their login privileges?",
+    "relevant_chunk_ids": ["IT-POL-001::chunk-0006"]
+  },
+  {
+    "query_id": "H013",
+    "query": "A document has reached its scheduled deletion date, but attorneys told us to preserve it. Which instruction wins?",
+    "relevant_chunk_ids": ["LEG-POL-001::chunk-0003"]
+  },
+  {
+    "query_id": "H014",
+    "query": "We have an extra copy of a business record that no longer has operational value. May we remove it?",
+    "relevant_chunk_ids": ["LEG-POL-001::chunk-0004"]
+  },
+  {
+    "query_id": "H015",
+    "query": "A confidential record no longer needs to be retained. Can it simply go in normal trash?",
+    "relevant_chunk_ids": ["LEG-POL-001::chunk-0005"]
+  },
+  {
+    "query_id": "H016",
+    "query": "Who is responsible for maintaining the company's record retention requirements?",
+    "relevant_chunk_ids": ["LEG-POL-001::chunk-0006"]
+  },
+  {
+    "query_id": "H017",
+    "query": "Before I reserve airfare for a work trip, whose permission is required?",
+    "relevant_chunk_ids": ["FIN-POL-001::chunk-0001"]
+  },
+  {
+    "query_id": "H018",
+    "query": "What security control do I need in addition to a password when signing in remotely?",
+    "relevant_chunk_ids": ["SEC-POL-001::chunk-0001"]
+  }
+]
