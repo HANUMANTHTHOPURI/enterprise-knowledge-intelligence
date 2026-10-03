@@ -105,3 +105,101 @@ def test_unstructured_document_raises_error():
         match="does not contain recognizable numbered sections",
     ):
         SectionChunker().chunk(document)
+
+def get_oversized_document() -> EnterpriseDocument:
+    """Create a synthetic document with a deliberately oversized section."""
+
+    metadata = DocumentMetadata(
+        document_id="TEST-LARGE-001",
+        department="Testing",
+        document_type="Policy",
+        version="1.0",
+        effective_date="2026-01-01",
+        access_level="Internal",
+        source="large_test.txt",
+    )
+
+    body = " ".join(
+        f"token{index:03d}"
+        for index in range(80)
+    )
+
+    return EnterpriseDocument(
+        content=(
+            "TEST KNOWLEDGE POLICY\n\n"
+            "1. LARGE SECTION\n\n"
+            f"{body}"
+        ),
+        metadata=metadata,
+    )
+
+
+def test_oversized_section_is_split():
+    document = get_oversized_document()
+
+    chunker = SectionChunker(
+        max_chunk_size=220,
+        chunk_overlap=40,
+    )
+
+    chunks = chunker.chunk(document)
+
+    assert len(chunks) > 1
+
+
+def test_oversized_chunks_respect_maximum_size():
+    document = get_oversized_document()
+
+    chunker = SectionChunker(
+        max_chunk_size=220,
+        chunk_overlap=40,
+    )
+
+    chunks = chunker.chunk(document)
+
+    assert all(
+        len(chunk.content) <= 220
+        for chunk in chunks
+    )
+
+
+def test_oversized_chunks_preserve_context():
+    document = get_oversized_document()
+
+    chunker = SectionChunker(
+        max_chunk_size=220,
+        chunk_overlap=40,
+    )
+
+    chunks = chunker.chunk(document)
+
+    for chunk in chunks:
+        assert chunk.content.startswith(
+            "TEST KNOWLEDGE POLICY"
+        )
+
+        assert "1. LARGE SECTION" in chunk.content
+
+
+def test_oversized_chunks_preserve_overlap():
+    document = get_oversized_document()
+
+    chunker = SectionChunker(
+        max_chunk_size=220,
+        chunk_overlap=40,
+    )
+
+    chunks = chunker.chunk(document)
+
+    prefix = (
+        "TEST KNOWLEDGE POLICY\n\n"
+        "1. LARGE SECTION\n\n"
+    )
+
+    first_body = chunks[0].content.removeprefix(prefix)
+    second_body = chunks[1].content.removeprefix(prefix)
+
+    first_tail = set(first_body.split()[-10:])
+    second_start = set(second_body.split()[:10])
+
+    assert first_tail.intersection(second_start)
