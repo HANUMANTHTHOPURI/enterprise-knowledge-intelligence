@@ -37,3 +37,6 @@ Thumbs.db
 # Generated vector store artifacts
 data/vectorstore/*.faiss
 data/vectorstore/*_chunks.json
+
+# Python package build metadata
+*.egg-info/
