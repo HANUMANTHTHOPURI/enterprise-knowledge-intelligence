@@ -1,0 +1,94 @@
+[
+  {
+    "query_id": "RAG001",
+    "question": "Can I work remotely from another country, and who must approve it?",
+    "should_answer": true,
+    "expected_document_ids": [
+      "HR-POL-001"
+    ],
+    "expected_keywords": [
+      "Human Resources",
+      "Information Security",
+      "Legal"
+    ]
+  },
+  {
+    "query_id": "RAG002",
+    "question": "What should an employee do after discovering a suspected security incident?",
+    "should_answer": true,
+    "expected_document_ids": [
+      "SEC-POL-001"
+    ],
+    "expected_keywords": [
+      "report"
+    ]
+  },
+  {
+    "query_id": "RAG003",
+    "question": "Does business travel require approval before booking?",
+    "should_answer": true,
+    "expected_document_ids": [
+      "FIN-POL-001"
+    ],
+    "expected_keywords": [
+      "approval"
+    ]
+  },
+  {
+    "query_id": "RAG004",
+    "question": "What is required before an employee receives access to company software?",
+    "should_answer": true,
+    "expected_document_ids": [
+      "IT-POL-001"
+    ],
+    "expected_keywords": [
+      "access"
+    ]
+  },
+  {
+    "query_id": "RAG005",
+    "question": "How should company records be retained?",
+    "should_answer": true,
+    "expected_document_ids": [
+      "LEG-POL-001"
+    ],
+    "expected_keywords": [
+      "retention"
+    ]
+  },
+  {
+    "query_id": "RAG006",
+    "question": "How many paid vacation days does each employee receive every year?",
+    "should_answer": false,
+    "expected_document_ids": [],
+    "expected_keywords": []
+  },
+  {
+    "query_id": "RAG007",
+    "question": "What health insurance company provides employee medical benefits?",
+    "should_answer": false,
+    "expected_document_ids": [],
+    "expected_keywords": []
+  },
+  {
+    "query_id": "RAG008",
+    "question": "What percentage annual salary increase is guaranteed to employees?",
+    "should_answer": false,
+    "expected_document_ids": [],
+    "expected_keywords": []
+  },
+  {
+    "query_id": "RAG009",
+    "question": "How many sick days may an employee take each year?",
+    "should_answer": false,
+    "expected_document_ids": [],
+    "expected_keywords": []
+  },
+  {
+    "query_id": "RAG010",
+    "question": "What is the company's maternity leave duration?",
+    "should_answer": false,
+    "expected_document_ids": [],
+    "expected_keywords": []
+  }
+]
