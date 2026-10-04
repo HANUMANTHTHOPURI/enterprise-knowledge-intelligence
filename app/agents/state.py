@@ -2,6 +2,7 @@ from typing import TypedDict
 
 from app.generation.models import (
     ContextBundle,
+    EvidenceAssessment,
     GeneratedAnswer,
     RAGResponse,
 )
@@ -16,6 +17,8 @@ class RAGAgentState(TypedDict, total=False):
     retrieval_results: list[RetrievalResult]
 
     context_bundle: ContextBundle
+
+    evidence_assessment: EvidenceAssessment
 
     generated_answer: GeneratedAnswer
 

@@ -33,3 +33,9 @@ class RAGResponse(BaseModel):
     answer: str = Field(min_length=1)
     sufficient_evidence: bool
     sources: list[ContextSource]
+
+class EvidenceAssessment(BaseModel):
+    """Decision about whether retrieved evidence can answer the question."""
+
+    sufficient_evidence: bool
+    reasoning: str

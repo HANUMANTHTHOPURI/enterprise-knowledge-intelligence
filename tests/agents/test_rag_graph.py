@@ -3,7 +3,10 @@ import pytest
 from app.agents.rag_graph import RAGAgent
 from app.chunking.models import DocumentChunk
 from app.generation.context_builder import ContextBuilder
-from app.generation.models import GeneratedAnswer
+from app.generation.models import (
+    EvidenceAssessment,
+    GeneratedAnswer,
+)
 from app.ingestion.models import DocumentMetadata
 from app.retrieval.models import RetrievalResult
 
@@ -47,6 +50,30 @@ class FakeRetriever:
         return [make_result()]
 
 
+class FakeSufficientEvaluator:
+    def evaluate(
+        self,
+        question,
+        context_bundle,
+    ) -> EvidenceAssessment:
+        return EvidenceAssessment(
+            sufficient_evidence=True,
+            reasoning="The policy directly answers the question.",
+        )
+
+
+class FakeInsufficientEvaluator:
+    def evaluate(
+        self,
+        question,
+        context_bundle,
+    ) -> EvidenceAssessment:
+        return EvidenceAssessment(
+            sufficient_evidence=False,
+            reasoning="The retrieved policy does not answer the question.",
+        )
+
+
 class FakeGroundedGenerator:
     def generate(
         self,
@@ -78,10 +105,22 @@ class FakeAbstainingGenerator:
         )
 
 
-def test_graph_routes_to_grounded_response():
+class FailingGenerator:
+    def generate(
+        self,
+        question,
+        context_bundle,
+    ) -> GeneratedAnswer:
+        raise AssertionError(
+            "Generator should not run when evidence is insufficient"
+        )
+
+
+def test_graph_routes_sufficient_evidence_to_grounded_response():
     agent = RAGAgent(
         retriever=FakeRetriever(),
         context_builder=ContextBuilder(),
+        evidence_evaluator=FakeSufficientEvaluator(),
         generator=FakeGroundedGenerator(),
     )
 
@@ -94,11 +133,12 @@ def test_graph_routes_to_grounded_response():
     assert response.sources[0].document_id == "HR-POL-001"
 
 
-def test_graph_routes_to_abstention():
+def test_graph_abstains_before_generation_when_evidence_is_insufficient():
     agent = RAGAgent(
         retriever=FakeRetriever(),
         context_builder=ContextBuilder(),
-        generator=FakeAbstainingGenerator(),
+        evidence_evaluator=FakeInsufficientEvaluator(),
+        generator=FailingGenerator(),
     )
 
     response = agent.invoke(
@@ -109,10 +149,27 @@ def test_graph_routes_to_abstention():
     assert response.sources == []
 
 
+def test_generator_can_still_trigger_secondary_abstention():
+    agent = RAGAgent(
+        retriever=FakeRetriever(),
+        context_builder=ContextBuilder(),
+        evidence_evaluator=FakeSufficientEvaluator(),
+        generator=FakeAbstainingGenerator(),
+    )
+
+    response = agent.invoke(
+        "Can I work from another country?"
+    )
+
+    assert response.sufficient_evidence is False
+    assert response.sources == []
+
+
 def test_empty_question_raises_error():
     agent = RAGAgent(
         retriever=FakeRetriever(),
         context_builder=ContextBuilder(),
+        evidence_evaluator=FakeSufficientEvaluator(),
         generator=FakeGroundedGenerator(),
     )
 
@@ -131,6 +188,7 @@ def test_invalid_retrieval_top_k_raises_error():
         RAGAgent(
             retriever=FakeRetriever(),
             context_builder=ContextBuilder(),
+            evidence_evaluator=FakeSufficientEvaluator(),
             generator=FakeGroundedGenerator(),
             retrieval_top_k=0,
         )

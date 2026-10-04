@@ -4,6 +4,7 @@ from langgraph.graph import END, START, StateGraph
 
 from app.agents.state import RAGAgentState
 from app.generation.context_builder import ContextBuilder
+from app.generation.evidence_evaluator import EvidenceEvaluator
 from app.generation.models import RAGResponse
 from app.generation.openai_generator import OpenAIGenerator
 from app.retrieval.reranked_retriever import RerankedRetriever
@@ -16,6 +17,7 @@ class RAGAgent:
         self,
         retriever: RerankedRetriever,
         context_builder: ContextBuilder,
+        evidence_evaluator: EvidenceEvaluator,
         generator: OpenAIGenerator,
         retrieval_top_k: int = 3,
     ) -> None:
@@ -26,6 +28,7 @@ class RAGAgent:
 
         self.retriever = retriever
         self.context_builder = context_builder
+        self.evidence_evaluator = evidence_evaluator
         self.generator = generator
         self.retrieval_top_k = retrieval_top_k
 
@@ -44,6 +47,11 @@ class RAGAgent:
         workflow.add_node(
             "build_context",
             self._context_node,
+        )
+
+        workflow.add_node(
+            "assess_evidence",
+            self._assess_evidence_node,
         )
 
         workflow.add_node(
@@ -73,12 +81,21 @@ class RAGAgent:
 
         workflow.add_edge(
             "build_context",
-            "generate",
+            "assess_evidence",
+        )
+
+        workflow.add_conditional_edges(
+            "assess_evidence",
+            self._route_evidence,
+            {
+                "sufficient": "generate",
+                "insufficient": "abstention",
+            },
         )
 
         workflow.add_conditional_edges(
             "generate",
-            self._route_answer,
+            self._route_generated_answer,
             {
                 "grounded": "grounded_response",
                 "abstain": "abstention",
@@ -126,11 +143,37 @@ class RAGAgent:
             "context_bundle": context_bundle,
         }
 
+    def _assess_evidence_node(
+        self,
+        state: RAGAgentState,
+    ) -> dict:
+        """Decide whether retrieved evidence can answer the question."""
+
+        assessment = self.evidence_evaluator.evaluate(
+            question=state["question"],
+            context_bundle=state["context_bundle"],
+        )
+
+        return {
+            "evidence_assessment": assessment,
+        }
+
+    @staticmethod
+    def _route_evidence(
+        state: RAGAgentState,
+    ) -> Literal["sufficient", "insufficient"]:
+        """Route based on retrieved evidence quality."""
+
+        if state["evidence_assessment"].sufficient_evidence:
+            return "sufficient"
+
+        return "insufficient"
+
     def _generate_node(
         self,
         state: RAGAgentState,
     ) -> dict:
-        """Generate a grounded answer from retrieved evidence."""
+        """Generate an answer from approved evidence."""
 
         generated_answer = self.generator.generate(
             question=state["question"],
@@ -142,10 +185,10 @@ class RAGAgent:
         }
 
     @staticmethod
-    def _route_answer(
+    def _route_generated_answer(
         state: RAGAgentState,
     ) -> Literal["grounded", "abstain"]:
-        """Route based on whether evidence is sufficient."""
+        """Apply a second safety check after generation."""
 
         if state["generated_answer"].sufficient_evidence:
             return "grounded"
@@ -186,13 +229,23 @@ class RAGAgent:
     def _abstention_node(
         state: RAGAgentState,
     ) -> dict:
-        """Construct a response when enterprise evidence is insufficient."""
+        """Construct a controlled insufficient-evidence response."""
 
-        generated_answer = state["generated_answer"]
+        generated_answer = state.get(
+            "generated_answer"
+        )
+
+        if generated_answer is not None:
+            answer_text = generated_answer.answer
+        else:
+            answer_text = (
+                "The available company documents do not provide "
+                "enough information to answer this question."
+            )
 
         response = RAGResponse(
             question=state["question"],
-            answer=generated_answer.answer,
+            answer=answer_text,
             sufficient_evidence=False,
             sources=[],
         )
