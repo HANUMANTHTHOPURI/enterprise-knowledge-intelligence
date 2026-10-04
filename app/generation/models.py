@@ -17,4 +17,11 @@ class ContextBundle(BaseModel):
 
     context: str = Field(min_length=1)
     sources: list[ContextSource] = Field(min_length=1)
-    
+
+
+class GeneratedAnswer(BaseModel):
+    """Structured answer produced from retrieved enterprise evidence."""
+
+    answer: str
+    sufficient_evidence: bool
+    cited_source_numbers: list[int]
