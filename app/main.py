@@ -1,3 +1,4 @@
+import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
@@ -7,6 +8,16 @@ from app.agents.rag_graph import RAGAgent
 from app.api.routes import router
 from app.core.bootstrap import build_rag_agent
 from app.core.config import settings
+
+logging.basicConfig(
+    level=logging.INFO,
+    format=(
+        "%(asctime)s | "
+        "%(levelname)s | "
+        "%(name)s | "
+        "%(message)s"
+    ),
+)
 
 
 def create_app(

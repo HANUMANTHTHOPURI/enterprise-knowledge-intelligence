@@ -1,5 +1,7 @@
 from pydantic import BaseModel, Field, field_validator
 
+from app.generation.models import ContextSource
+
 
 class AskRequest(BaseModel):
     """Question submitted to the enterprise knowledge agent."""
@@ -25,8 +27,25 @@ class AskRequest(BaseModel):
         return cleaned
 
 
+class AskResponse(BaseModel):
+    """HTTP response returned by the enterprise RAG API."""
+
+    question: str
+    answer: str
+    sufficient_evidence: bool
+    sources: list[ContextSource]
+    latency_ms: float = Field(ge=0.0)
+
+
 class HealthResponse(BaseModel):
     """Basic API health status."""
 
     status: str
     service: str
+
+
+class ReadinessResponse(BaseModel):
+    """Application readiness status."""
+
+    status: str
+    rag_agent_ready: bool
