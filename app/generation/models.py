@@ -25,3 +25,11 @@ class GeneratedAnswer(BaseModel):
     answer: str
     sufficient_evidence: bool
     cited_source_numbers: list[int]
+
+class RAGResponse(BaseModel):
+    """Final grounded response returned by the RAG pipeline."""
+
+    question: str = Field(min_length=1)
+    answer: str = Field(min_length=1)
+    sufficient_evidence: bool
+    sources: list[ContextSource]
