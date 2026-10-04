@@ -1,0 +1,145 @@
+{
+  "metrics": {
+    "total_queries": 10,
+    "supported_queries": 5,
+    "unsupported_queries": 5,
+    "decision_accuracy": 1.0,
+    "citation_accuracy": 1.0,
+    "abstention_accuracy": 1.0,
+    "mean_keyword_coverage": 1.0
+  },
+  "query_results": [
+    {
+      "query_id": "RAG001",
+      "question": "Can I work remotely from another country, and who must approve it?",
+      "should_answer": true,
+      "answer": "Yes, you can work remotely from another country, but it requires prior approval from Human Resources, Information Security, and the Legal department. Approval must be obtained before you begin working outside your assigned country.",
+      "sufficient_evidence": true,
+      "source_document_ids": [
+        "HR-POL-001"
+      ],
+      "decision_correct": true,
+      "citation_correct": true,
+      "abstention_correct": true,
+      "keyword_coverage": 1.0
+    },
+    {
+      "query_id": "RAG002",
+      "question": "What should an employee do after discovering a suspected security incident?",
+      "should_answer": true,
+      "answer": "After discovering a suspected security incident, an employee should report it to the Information Security team as soon as possible. They must not attempt to independently investigate or remediate the incident unless instructed by Information Security.",
+      "sufficient_evidence": true,
+      "source_document_ids": [
+        "SEC-POL-001"
+      ],
+      "decision_correct": true,
+      "citation_correct": true,
+      "abstention_correct": true,
+      "keyword_coverage": 1.0
+    },
+    {
+      "query_id": "RAG003",
+      "question": "Does business travel require approval before booking?",
+      "should_answer": true,
+      "answer": "Yes, business travel requires approval by the employee's manager before reservations are made. For international travel, approval from the department director is also required.",
+      "sufficient_evidence": true,
+      "source_document_ids": [
+        "FIN-POL-001"
+      ],
+      "decision_correct": true,
+      "citation_correct": true,
+      "abstention_correct": true,
+      "keyword_coverage": 1.0
+    },
+    {
+      "query_id": "RAG004",
+      "question": "What is required before an employee receives access to company software?",
+      "should_answer": true,
+      "answer": "Before an employee receives access to company software, they must submit an approved access request that identifies the business need, requested system, and required permission level. Additionally, the access request requires approval from the employee's manager, and access to privileged administrative systems may need further approval from Information Security or the system owner.",
+      "sufficient_evidence": true,
+      "source_document_ids": [
+        "IT-POL-001",
+        "IT-POL-001"
+      ],
+      "decision_correct": true,
+      "citation_correct": true,
+      "abstention_correct": true,
+      "keyword_coverage": 1.0
+    },
+    {
+      "query_id": "RAG005",
+      "question": "How should company records be retained?",
+      "should_answer": true,
+      "answer": "Company records should be retained according to the company's approved retention schedule, as stated in the Data Retention and Records Policy. Employees must not delete records before the applicable retention period expires. Additionally, business departments are responsible for ensuring that records under their control are retained and disposed of according to this policy.",
+      "sufficient_evidence": true,
+      "source_document_ids": [
+        "LEG-POL-001",
+        "LEG-POL-001"
+      ],
+      "decision_correct": true,
+      "citation_correct": true,
+      "abstention_correct": true,
+      "keyword_coverage": 1.0
+    },
+    {
+      "query_id": "RAG006",
+      "question": "How many paid vacation days does each employee receive every year?",
+      "should_answer": false,
+      "answer": "The available company documents do not provide enough information to answer this question.",
+      "sufficient_evidence": false,
+      "source_document_ids": [],
+      "decision_correct": true,
+      "citation_correct": true,
+      "abstention_correct": true,
+      "keyword_coverage": 1.0
+    },
+    {
+      "query_id": "RAG007",
+      "question": "What health insurance company provides employee medical benefits?",
+      "should_answer": false,
+      "answer": "The available company documents do not provide enough information to answer this question.",
+      "sufficient_evidence": false,
+      "source_document_ids": [],
+      "decision_correct": true,
+      "citation_correct": true,
+      "abstention_correct": true,
+      "keyword_coverage": 1.0
+    },
+    {
+      "query_id": "RAG008",
+      "question": "What percentage annual salary increase is guaranteed to employees?",
+      "should_answer": false,
+      "answer": "The available company documents do not provide enough information to answer this question.",
+      "sufficient_evidence": false,
+      "source_document_ids": [],
+      "decision_correct": true,
+      "citation_correct": true,
+      "abstention_correct": true,
+      "keyword_coverage": 1.0
+    },
+    {
+      "query_id": "RAG009",
+      "question": "How many sick days may an employee take each year?",
+      "should_answer": false,
+      "answer": "The available company documents do not provide enough information to answer this question.",
+      "sufficient_evidence": false,
+      "source_document_ids": [],
+      "decision_correct": true,
+      "citation_correct": true,
+      "abstention_correct": true,
+      "keyword_coverage": 1.0
+    },
+    {
+      "query_id": "RAG010",
+      "question": "What is the company's maternity leave duration?",
+      "should_answer": false,
+      "answer": "The available company documents do not provide enough information to answer this question.",
+      "sufficient_evidence": false,
+      "source_document_ids": [],
+      "decision_correct": true,
+      "citation_correct": true,
+      "abstention_correct": true,
+      "keyword_coverage": 1.0
+    }
+  ]
+}

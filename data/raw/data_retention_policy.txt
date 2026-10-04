@@ -14,7 +14,7 @@ This policy establishes requirements for retaining, protecting, and disposing of
 
 2. RECORD CLASSIFICATION
 
-Business records must be classified according to their legal, regulatory, operational, and contractual requirements.
+Business records must be classified according to applicable legal, regulatory, operational, and contractual requirements.
 
 Employees must store official business records in approved company repositories.
 
@@ -28,7 +28,7 @@ Employees must not delete records before the applicable retention period expires
 
 When Legal issues a legal hold, affected records must be preserved even if their normal retention period has expired.
 
-Employees receiving a legal hold notice must not delete, alter, overwrite, or destroy affected information until Legal releases the hold.
+Employees who receive a legal hold notice must not delete, alter, overwrite, or destroy affected information until Legal releases the hold.
 
 5. DUPLICATE AND TRANSITORY INFORMATION
 
@@ -36,12 +36,12 @@ Duplicate copies and transitory information that are not official business recor
 
 6. SECURE DISPOSAL
 
-Records that have reached the end of their required retention period must be disposed of using approved secure-destruction procedures.
+Records that have reached the end of their required retention period must be disposed of using approved secure destruction procedures.
 
 Confidential records must not be placed in ordinary trash or transferred to unauthorized storage systems.
 
 7. RESPONSIBILITIES
 
-Legal and Compliance maintains retention requirements.
+Legal and Compliance maintains the company's retention requirements.
 
 Business departments are responsible for ensuring that records under their control are retained and disposed of according to this policy.

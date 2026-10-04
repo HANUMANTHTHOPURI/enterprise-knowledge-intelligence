@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     chunk_size: int = 800
     chunk_overlap: int = 120
     retrieval_top_k: int = 5
+    rerank_candidate_k: int = 10
 
     # Models
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"

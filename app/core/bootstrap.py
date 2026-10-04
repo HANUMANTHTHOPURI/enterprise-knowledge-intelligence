@@ -1,4 +1,5 @@
 from pathlib import Path
+from app.core.config import settings
 
 from app.agents.rag_graph import RAGAgent
 from app.embeddings.encoder import EmbeddingEncoder
@@ -44,7 +45,7 @@ def build_retriever(
     return RerankedRetriever(
         dense_retriever=faiss_retriever,
         reranker=reranker,
-        candidate_k=5,
+        candidate_k=settings.rerank_candidate_k,
     )
 
 
