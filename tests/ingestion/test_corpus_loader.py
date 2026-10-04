@@ -4,7 +4,6 @@ import pytest
 
 from app.ingestion.corpus_loader import CorpusLoader
 
-
 CORPUS_DIRECTORY = Path("data/raw")
 
 

@@ -15,7 +15,6 @@ from app.api.models import (
     ReadinessResponse,
 )
 
-
 logger = logging.getLogger(
     "enterprise_knowledge_intelligence.api"
 )

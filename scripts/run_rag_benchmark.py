@@ -1,20 +1,11 @@
-import sys
 from pathlib import Path
 from time import perf_counter
-
-
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(
-        0,
-        str(PROJECT_ROOT),
-    )
-
 
 from app.core.bootstrap import build_rag_agent
 from app.evaluation.rag_benchmark import RAGBenchmarkRunner
 from app.evaluation.rag_evaluator import RAGEvaluator
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
 
 
 DATASET_PATH = (

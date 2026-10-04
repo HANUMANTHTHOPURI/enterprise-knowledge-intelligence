@@ -1,10 +1,9 @@
-from pydantic import ValidationError
 from pathlib import Path
 
 import pytest
+from pydantic import ValidationError
 
 from app.ingestion.text_loader import TextDocumentLoader
-
 
 TEST_DOCUMENT = Path("data/raw/employee_remote_work_policy.txt")
 

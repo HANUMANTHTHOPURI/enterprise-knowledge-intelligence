@@ -1,7 +1,7 @@
 from pathlib import Path
-from app.core.config import settings
 
 from app.agents.rag_graph import RAGAgent
+from app.core.config import settings
 from app.embeddings.encoder import EmbeddingEncoder
 from app.generation.context_builder import ContextBuilder
 from app.generation.evidence_evaluator import EvidenceEvaluator
@@ -11,7 +11,6 @@ from app.retrieval.faiss_retriever import FAISSRetriever
 from app.retrieval.reranked_retriever import RerankedRetriever
 from app.services.rag_service import RAGService
 from app.vectorstore.faiss_index import FAISSVectorIndex
-
 
 DEFAULT_INDEX_PATH = Path(
     "data/vectorstore/enterprise_knowledge.faiss"
