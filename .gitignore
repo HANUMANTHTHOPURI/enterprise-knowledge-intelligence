@@ -34,3 +34,6 @@ Thumbs.db
 
 # Logs
 *.log
+# Generated vector store artifacts
+data/vectorstore/*.faiss
+data/vectorstore/*_chunks.json
