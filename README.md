@@ -2,102 +2,207 @@
 
 [![CI](https://github.com/HANUMANTHTHOPURI/enterprise-knowledge-intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/HANUMANTHTHOPURI/enterprise-knowledge-intelligence/actions/workflows/ci.yml)
 
-A production-oriented **Enterprise Retrieval-Augmented Generation (RAG) platform** built with semantic retrieval, FAISS vector search, cross-encoder reranking, evidence validation, LangGraph-based agentic orchestration, OpenAI generation, FastAPI, Docker, automated evaluation, and CI.
+A production-oriented **Enterprise Retrieval-Augmented Generation (RAG) platform** built using semantic retrieval, FAISS vector search, cross-encoder reranking, evidence validation, LangGraph-based agentic orchestration, OpenAI grounded generation, FastAPI, Docker, automated evaluation, and GitHub Actions CI.
 
-The system is designed to answer enterprise policy questions only when sufficient evidence exists and to abstain when the knowledge base does not support an answer.
+The platform is designed to answer enterprise policy questions using retrieved company knowledge, provide source-backed responses when sufficient evidence exists, and explicitly abstain when the available evidence does not support an answer.
 
 ---
 
-## Project Overview
+## Project at a Glance
 
-Enterprise organizations often store critical knowledge across policy documents, procedures, security standards, financial guidelines, and compliance documentation.
+<p align="center">
+  <img src="reports/figures/portfolio/01_project_overview.png"
+       alt="Enterprise Knowledge Intelligence Platform Overview"
+       width="850">
+</p>
 
-This project implements an end-to-end AI knowledge platform that:
+The project follows six major layers:
 
-- Ingests enterprise documents and structured metadata
-- Performs section-aware document chunking
-- Generates dense semantic embeddings
-- Stores and retrieves vectors using FAISS
-- Reranks retrieval candidates using a cross-encoder
-- Evaluates whether retrieved evidence is sufficient
-- Uses LangGraph for conditional agentic execution
-- Generates grounded answers with source citations
-- Abstains when evidence is insufficient
-- Exposes the system through a FastAPI REST API
-- Runs inside Docker
-- Includes automated retrieval and end-to-end RAG evaluation
-- Uses GitHub Actions for continuous integration
+```text
+Enterprise Documents
+        ↓
+Document Processing
+        ↓
+Semantic Retrieval
+        ↓
+Agentic RAG
+        ↓
+Grounded LLM Response
+        ↓
+API & Deployment
+```
+
+---
+
+## Key Capabilities
+
+- Enterprise document ingestion with validated metadata
+- Section-aware document chunking
+- Sentence Transformer embeddings
+- Persistent FAISS vector indexing
+- Dense semantic retrieval
+- Cross-encoder reranking
+- Evidence-quality validation
+- LangGraph conditional agentic workflow
+- OpenAI grounded generation
+- Citation validation
+- Explicit abstention for unsupported questions
+- FastAPI REST API
+- Docker containerization
+- Retrieval and end-to-end RAG evaluation
+- Ruff static analysis
+- 71 automated Pytest tests
+- GitHub Actions continuous integration
 
 ---
 
 ## System Architecture
 
-```mermaid
-flowchart TD
+The platform separates document indexing, runtime retrieval, evidence validation, grounded generation, abstention, serving, deployment, and engineering quality into distinct layers.
 
-    A[Enterprise Policy Documents] --> B[Document Ingestion]
-    B --> C[Metadata Validation]
-    C --> D[Section-Aware Chunking]
+<p align="center">
+  <img src="reports/figures/portfolio/02_rag_architecture.png"
+       alt="Enterprise RAG Architecture"
+       width="850">
+</p>
 
-    D --> E[Sentence Transformer Embeddings]
-    E --> F[(FAISS Vector Index)]
+### Main Architecture Layers
 
-    Q[User Question] --> G[Query Embedding]
-    G --> F
+**1. Indexing Pipeline**
 
-    F --> H[Dense Retrieval<br/>Top 10 Candidates]
-    H --> I[Cross-Encoder Reranking]
-    I --> J[Top 3 Evidence Chunks]
+```text
+Enterprise Documents
+        ↓
+Section-Aware Chunking
+        ↓
+Sentence Transformer Embeddings
+        ↓
+FAISS Vector Index
+```
 
-    J --> K[Context Builder]
-    K --> L[Evidence Quality Gate]
+**2. Query & Retrieval**
 
-    L -->|Sufficient Evidence| M[LangGraph Generation Path]
-    L -->|Insufficient Evidence| N[Abstention Response]
+```text
+User Question
+        ↓
+Query Embedding
+        ↓
+Dense Retrieval — Top 10
+        ↓
+Cross-Encoder Reranking
+        ↓
+Top 3 Evidence Chunks
+        ↓
+Context Builder
+        ↓
+Evidence Quality Gate
+```
 
-    M --> O[OpenAI Grounded Generation]
-    O --> P[Citation Validation]
+**3. Agentic RAG & Generation**
 
-    P -->|Valid| R[Grounded Answer + Sources]
-    P -->|Invalid| N
+```text
+Evidence Quality Gate
+        │
+        ├── Sufficient Evidence
+        │       ↓
+        │   LangGraph Workflow
+        │       ↓
+        │   OpenAI Grounded Generation
+        │       ↓
+        │   Citation Validation
+        │       ↓
+        │   Grounded Answer + Sources
+        │
+        └── Insufficient Evidence
+                ↓
+            Abstention Response
+```
 
-    R --> S[FastAPI REST API]
-    N --> S
+**4. Serving & Engineering**
 
-    S --> T[Docker Container]
+```text
+Grounded Answer / Abstention
+        ↓
+FastAPI REST API
+        ↓
+Docker Container
+
+GitHub Actions CI
+        ↓
+Ruff + Pytest
+```
+
+GitHub Actions is intentionally treated as an engineering-quality layer rather than part of the runtime inference path.
+
+---
+
+## Enterprise Knowledge Corpus
+
+The project uses a synthetic enterprise policy corpus covering multiple organizational domains.
+
+Current corpus:
+
+```text
+5 enterprise policy documents
+35 semantic chunks
+7 sections per document
+```
+
+Policy areas include:
+
+- Human Resources
+- Information Security
+- Finance
+- Information Technology
+- Legal and Compliance
+
+Each document contains structured metadata including:
+
+- Document ID
+- Department
+- Document Type
+- Version
+- Effective Date
+- Access Level
+- Source
+
+---
+
+## Document Processing
+
+Enterprise documents are loaded and validated before entering the retrieval pipeline.
+
+The ingestion layer uses **Pydantic models** to enforce consistent document metadata and reject malformed documents.
+
+### Section-Aware Chunking
+
+Instead of relying only on arbitrary character windows, the system identifies numbered policy sections and preserves document structure.
+
+Example conceptual flow:
+
+```text
+Policy Document
+        ↓
+Section Detection
+        ↓
+Semantic Section Chunks
+        ↓
+Fallback Windowing for Oversized Sections
+```
+
+Chunk IDs are deterministic and preserve document traceability.
+
+Example:
+
+```text
+HR-POL-001::chunk-0005
 ```
 
 ---
 
-## Core AI Pipeline
+## Embeddings
 
-### 1. Enterprise Document Ingestion
-
-Each document includes structured metadata such as:
-
-- Document ID
-- Department
-- Document type
-- Version
-- Effective date
-- Access level
-- Source file
-
-The ingestion layer validates documents using Pydantic before they enter the retrieval pipeline.
-
-### 2. Section-Aware Chunking
-
-Rather than splitting documents at arbitrary character boundaries, the system detects numbered policy sections and preserves semantic structure.
-
-The current enterprise corpus contains:
-
-- **5 enterprise policy documents**
-- **35 semantic chunks**
-- **7 sections per document**
-
-### 3. Dense Embeddings
-
-Embedding model:
+The platform uses:
 
 ```text
 sentence-transformers/all-MiniLM-L6-v2
@@ -109,88 +214,243 @@ Embedding dimension:
 384
 ```
 
-Embeddings are normalized before similarity search.
+Document chunks and user queries are converted into normalized dense vectors before similarity search.
 
-### 4. FAISS Vector Retrieval
+---
 
-The system uses a persistent FAISS inner-product index for efficient semantic retrieval.
+## FAISS Vector Search
 
-Generated vector-store artifacts:
+The system uses a persistent **FAISS inner-product vector index** for semantic retrieval.
+
+Generated artifacts:
 
 ```text
-enterprise_knowledge.faiss
-enterprise_knowledge_chunks.json
+data/vectorstore/enterprise_knowledge.faiss
+data/vectorstore/enterprise_knowledge_chunks.json
 ```
 
-These artifacts are reproducibly generated from the source documents and are intentionally excluded from Git.
+These files are generated programmatically and excluded from Git because they are reproducible build artifacts.
 
-### 5. Cross-Encoder Reranking
+To rebuild the vector store:
 
-Initial semantic retrieval returns the top **10 candidates**.
+```bash
+python scripts/build_vectorstore.py
+```
 
-They are reranked using:
+Expected result:
+
+```text
+Documents:           5
+Chunks:              35
+Vectors:             35
+Embedding dimension: 384
+```
+
+---
+
+## Retrieval Strategy Evaluation
+
+Multiple retrieval approaches were evaluated instead of selecting a retrieval strategy by assumption.
+
+Evaluated approaches included:
+
+- BM25 lexical retrieval
+- Dense semantic retrieval
+- Hybrid Reciprocal Rank Fusion
+- Dense retrieval with cross-encoder reranking
+
+### Hard-Query Benchmark
+
+| Retrieval Strategy | Recall@1 | MRR@5 | Recall@5 |
+|---|---:|---:|---:|
+| BM25 | 0.3889 | 0.5463 | 0.7778 |
+| Hybrid RRF | 0.7222 | 0.8167 | 1.0000 |
+| Dense Retrieval | 0.8333 | 0.8981 | 1.0000 |
+| Dense + Cross-Encoder | **0.8889** | **0.9444** | **1.0000** |
+
+<p align="center">
+  <img src="reports/figures/portfolio/03_retrieval_evaluation.png"
+       alt="Retrieval Strategy Evaluation"
+       width="850">
+</p>
+
+Dense semantic retrieval performed better than BM25 and hybrid RRF on the difficult semantic-query benchmark.
+
+Cross-encoder reranking further improved:
+
+```text
+Recall@1
+0.8333 → 0.8889
+
+MRR@5
+0.8981 → 0.9444
+```
+
+The selected production retrieval pipeline is:
+
+```text
+Dense Retrieval Top-10
+        ↓
+Cross-Encoder Reranking
+        ↓
+Top-3 Evidence Chunks
+```
+
+---
+
+## Cross-Encoder Reranking
+
+The reranker uses:
 
 ```text
 cross-encoder/ms-marco-MiniLM-L-6-v2
 ```
 
-The highest-ranked evidence chunks are then used for context construction.
+Dense retrieval first produces a larger candidate set.
 
-### 6. Evidence Quality Gate
+The cross-encoder then jointly evaluates each query-document pair and reranks candidates based on semantic relevance.
 
-Before answer generation, an LLM-based evidence evaluator determines whether the retrieved context directly supports the user's question.
-
-This prevents the generator from answering questions that are merely topically similar to the retrieved documents.
-
-### 7. Agentic RAG with LangGraph
-
-The RAG workflow uses conditional LangGraph execution:
-
-```text
-Retrieve
-   ?
-Build Context
-   ?
-Assess Evidence
-   ?
-   +-- Sufficient ? Generate ? Validate Citations ? Answer
-   �
-   +-- Insufficient ? Abstain
-```
-
-This implements two protection layers:
-
-1. **Evidence Gate**
-2. **Generation/Citation Gate**
+This improves precision before the retrieved evidence is sent to the RAG workflow.
 
 ---
 
-## Retrieval Evaluation
+## Evidence Quality Gate
 
-Several retrieval strategies were evaluated using difficult semantic queries.
+Retrieval relevance alone does not guarantee that a source actually contains enough information to answer the user's question.
 
-| Retrieval Strategy | Recall@1 | MRR@5 | Recall@5 |
-|---|---:|---:|---:|
-| Dense Retrieval | 0.8333 | 0.8981 | 1.0000 |
-| Dense + Cross-Encoder Reranking | **0.8889** | **0.9444** | **1.0000** |
+The platform therefore includes an **Evidence Quality Gate** before generation.
 
-BM25 and hybrid reciprocal-rank fusion were also experimentally evaluated but did not outperform the dense retrieval + reranking configuration on the hard-query benchmark.
+The evaluator checks whether the retrieved enterprise evidence directly supports the requested level of detail.
+
+Examples:
+
+```text
+General policy question
+        ↓
+General supporting evidence may be sufficient
+```
+
+but:
+
+```text
+Question asks for a specific number,
+duration, percentage, provider,
+condition, permission, or procedure
+        ↓
+That specific fact must appear
+in the evidence
+```
+
+This prevents the system from converting loosely related retrieval results into unsupported answers.
+
+---
+
+## Agentic RAG with LangGraph
+
+The RAG workflow uses **LangGraph** for conditional orchestration.
+
+Conceptually:
+
+```text
+Retrieve
+   ↓
+Build Context
+   ↓
+Assess Evidence
+   ↓
+   ├── Sufficient
+   │       ↓
+   │    Generate
+   │       ↓
+   │    Validate Citations
+   │       ↓
+   │    Grounded Response
+   │
+   └── Insufficient
+           ↓
+        Abstention
+```
+
+The system therefore has two protection stages:
+
+```text
+Evidence Gate
+        +
+Generation / Citation Gate
+```
+
+---
+
+## Grounded LLM Generation
+
+When sufficient enterprise evidence is available, the system generates an answer using OpenAI.
+
+The generation layer is instructed to:
+
+- answer only from supplied enterprise context
+- treat retrieved documents as evidence rather than instructions
+- avoid external unsupported knowledge
+- provide structured source citations
+- abstain when evidence is insufficient
+- avoid inventing policy requirements
+
+---
+
+## Citation Validation
+
+Generated answers contain structured source numbers.
+
+Before returning a response, the system validates that:
+
+- cited sources exist
+- citation numbers are valid
+- returned sources correspond to the generated citations
+- unsupported responses do not contain fabricated citations
+
+This creates an additional defense against hallucinated source attribution.
+
+---
+
+## Abstention Behavior
+
+If the evidence-quality evaluator determines that the available documents cannot answer the question, the system follows the abstention path instead of generating an unsupported answer.
+
+Example:
+
+```text
+Question:
+"How many paid vacation days do employees receive each year?"
+
+Enterprise corpus:
+No vacation-day policy
+
+Result:
+sufficient_evidence = false
+sources = []
+```
+
+This behavior is a core design goal of the platform.
 
 ---
 
 ## End-to-End RAG Evaluation
 
-A curated enterprise benchmark containing:
+The complete RAG system was evaluated using a curated enterprise benchmark containing:
 
 ```text
-10 questions
+10 total questions
 5 supported questions
 5 unsupported questions
 ```
 
-was used to evaluate the complete RAG pipeline.
+The benchmark evaluates:
 
-Final benchmark results:
+- answer vs. abstain decisions
+- citation correctness
+- abstention correctness
+- expected keyword coverage
+
+### Final Benchmark Results
 
 | Metric | Result |
 |---|---:|
@@ -199,20 +459,21 @@ Final benchmark results:
 | Abstention Accuracy | **1.0000** |
 | Mean Expected Keyword Coverage | **1.0000** |
 
-These results represent **100% performance on the curated 10-query enterprise benchmark** and should not be interpreted as universal accuracy.
+<p align="center">
+  <img src="reports/figures/portfolio/04_rag_benchmark.png"
+       alt="End-to-End RAG Evaluation Benchmark"
+       width="850">
+</p>
 
-The evaluation workflow tests:
+> **Important:** These results represent 100% performance on the curated 10-query enterprise benchmark and should not be interpreted as universal model accuracy.
 
-- Answer-vs-abstain decisions
-- Citation correctness
-- Unsupported-question abstention
-- Expected keyword coverage
+The benchmark contains both questions that should be answered and questions that should be rejected, allowing evaluation of both usefulness and hallucination resistance.
 
 ---
 
-## FastAPI Interface
+## FastAPI REST API
 
-The platform exposes a REST API.
+The complete RAG workflow is exposed through FastAPI.
 
 ### Health Check
 
@@ -220,13 +481,17 @@ The platform exposes a REST API.
 GET /api/v1/health
 ```
 
+Used for application liveness checks.
+
 ### Readiness Check
 
 ```http
 GET /api/v1/ready
 ```
 
-### Ask a Question
+Confirms that the RAG agent is initialized and ready to serve requests.
+
+### Ask Endpoint
 
 ```http
 POST /api/v1/ask
@@ -240,59 +505,320 @@ Example request:
 }
 ```
 
-Example grounded response structure:
+Example response structure:
 
 ```json
 {
   "question": "Can I work remotely from another country, and who must approve it?",
-  "answer": "...",
+  "answer": "Grounded response based on the retrieved enterprise policy.",
   "sufficient_evidence": true,
-  "sources": [],
+  "sources": [
+    {
+      "source_number": 1,
+      "document_id": "HR-POL-001",
+      "chunk_id": "HR-POL-001::chunk-0005"
+    }
+  ],
   "latency_ms": 0
 }
 ```
 
-When the enterprise knowledge base does not contain sufficient information, the system returns an abstention response rather than inventing an answer.
+The API also includes:
+
+- request validation
+- blank-question rejection
+- generic internal error handling
+- readiness validation
+- latency measurement
+- structured response models
+- logging that avoids recording complete question and answer content
+
+---
+
+## API, Deployment & Engineering Quality
+
+<p align="center">
+  <img src="reports/figures/portfolio/05_api_deployment_workflow.png"
+       alt="API Deployment and Engineering Quality Workflow"
+       width="850">
+</p>
+
+The production engineering layer includes:
+
+- FastAPI REST endpoints
+- `/health`
+- `/ready`
+- `/ask`
+- grounded structured JSON responses
+- Docker containerization
+- reproducible vector-store generation
+- GitHub Actions CI
+- Ruff static analysis
+- 71 automated Pytest tests
+
+---
+
+## Docker Deployment
+
+The complete application can be built as a Docker image.
+
+### Build
+
+```bash
+docker build -t enterprise-knowledge-intelligence:1.0 .
+```
+
+### Run
+
+```bash
+docker run --rm \
+  --name enterprise-knowledge-api \
+  --env-file .env \
+  -p 8000:8000 \
+  enterprise-knowledge-intelligence:1.0
+```
+
+On Windows PowerShell:
+
+```powershell
+docker run --rm `
+    --name enterprise-knowledge-api `
+    --env-file .env `
+    -p 8000:8000 `
+    enterprise-knowledge-intelligence:1.0
+```
+
+The Dockerized application includes:
+
+```text
+FastAPI
+FAISS
+Sentence Transformers
+Cross-Encoder Reranking
+LangGraph
+OpenAI Integration
+Enterprise Vector Store
+```
+
+The application was tested successfully from inside the Docker container using both:
+
+```text
+Supported query   → sufficient_evidence = true
+Unsupported query → sufficient_evidence = false
+```
+
+---
+
+## Continuous Integration
+
+GitHub Actions automatically validates the project on pushes and pull requests to `main`.
+
+CI workflow:
+
+```text
+Repository Checkout
+        ↓
+Python 3.12 Setup
+        ↓
+Dependency Installation
+        ↓
+Ruff Static Analysis
+        ↓
+Pytest
+```
+
+Current status:
+
+```text
+Ruff       ✅
+Pytest     ✅ 71 passed
+CI         ✅ Green
+```
+
+A failed lint check or automated test causes the workflow to fail.
+
+---
+
+## Testing
+
+Run the complete automated test suite:
+
+```bash
+pytest
+```
+
+Current test suite:
+
+```text
+71 passed
+```
+
+Run static code-quality checks:
+
+```bash
+ruff check app tests scripts
+```
+
+Expected result:
+
+```text
+All checks passed!
+```
+
+The tests cover areas including:
+
+- ingestion
+- chunking
+- embeddings
+- retrieval
+- FAISS persistence
+- generation
+- citation validation
+- evidence evaluation
+- LangGraph workflow behavior
+- abstention logic
+- FastAPI endpoints
+- evaluation utilities
+- benchmark execution
+
+---
+
+## Reproducible Portfolio Visualizations
+
+All major portfolio diagrams and evaluation graphics are generated programmatically from:
+
+```text
+scripts/generate_portfolio_figures.py
+```
+
+Generated images are stored in:
+
+```text
+reports/figures/portfolio/
+```
+
+Current visualization set:
+
+```text
+01_project_overview.png
+02_rag_architecture.png
+03_retrieval_evaluation.png
+04_rag_benchmark.png
+05_api_deployment_workflow.png
+```
+
+Regenerate the complete visualization set using:
+
+```bash
+python scripts/generate_portfolio_figures.py
+```
+
+This ensures that the portfolio assets remain reproducible and version-controlled with the project rather than depending on external screenshots.
 
 ---
 
 ## Technology Stack
 
-### AI / Machine Learning
+### Generative AI & RAG
 
-- Python 3.12
-- Sentence Transformers
-- Cross-Encoder Reranking
-- FAISS
 - OpenAI API
 - LangGraph
+- Retrieval-Augmented Generation
+- Evidence-aware generation
+- Citation validation
+- Abstention routing
+
+### Retrieval & NLP
+
+- Sentence Transformers
+- FAISS
+- Cross-Encoder Reranking
+- BM25
+- Reciprocal Rank Fusion
+- Semantic Search
+
+### Machine Learning & Evaluation
+
 - NumPy
 - Scikit-learn
+- Recall@K
+- Mean Reciprocal Rank
+- Citation evaluation
+- Abstention evaluation
+- Expected keyword coverage
 
 ### Backend
 
 - FastAPI
 - Pydantic
+- Pydantic Settings
 - Uvicorn
 
-### Retrieval / Evaluation
+### Engineering
 
-- Dense semantic retrieval
-- BM25 experimentation
-- Reciprocal Rank Fusion experimentation
-- Recall@K
-- Mean Reciprocal Rank
-- Citation evaluation
-- Abstention evaluation
-
-### Engineering / Deployment
-
+- Python 3.12
 - Docker
 - Git
 - GitHub
 - GitHub Actions
-- Ruff
 - Pytest
+- Ruff
+
+---
+
+## Project Structure
+
+```text
+enterprise-knowledge-intelligence/
+│
+├── app/
+│   ├── agent/
+│   ├── api/
+│   ├── chunking/
+│   ├── core/
+│   ├── embeddings/
+│   ├── evaluation/
+│   ├── generation/
+│   ├── ingestion/
+│   ├── retrieval/
+│   └── vectorstore/
+│
+├── data/
+│   ├── raw/
+│   ├── evaluation/
+│   └── vectorstore/
+│
+├── notebooks/
+│
+├── reports/
+│   ├── figures/
+│   │   └── portfolio/
+│   │       ├── 01_project_overview.png
+│   │       ├── 02_rag_architecture.png
+│   │       ├── 03_retrieval_evaluation.png
+│   │       ├── 04_rag_benchmark.png
+│   │       └── 05_api_deployment_workflow.png
+│   │
+│   └── rag_benchmark_report.json
+│
+├── scripts/
+│   ├── build_vectorstore.py
+│   ├── generate_portfolio_figures.py
+│   └── run_rag_benchmark.py
+│
+├── tests/
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
+├── Dockerfile
+├── .dockerignore
+├── .env.example
+├── .gitignore
+├── pyproject.toml
+└── README.md
+```
 
 ---
 
@@ -302,6 +828,11 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/HANUMANTHTHOPURI/enterprise-knowledge-intelligence.git
+```
+
+Enter the project:
+
+```bash
 cd enterprise-knowledge-intelligence
 ```
 
@@ -327,23 +858,25 @@ pip install -e ".[dev]"
 
 ## Environment Configuration
 
-Create a local `.env` file:
+Create a local `.env` file using `.env.example`.
+
+Example:
 
 ```text
 OPENAI_API_KEY=your_key_here
 ```
 
-The `.env` file is excluded from Git and should never be committed.
+The `.env` file is excluded from Git and must never be committed.
 
 ---
 
-## Build the Vector Store
+## Build the Knowledge Index
 
 ```bash
 python scripts/build_vectorstore.py
 ```
 
-Expected configuration:
+Expected summary:
 
 ```text
 Documents:           5
@@ -366,175 +899,164 @@ Swagger documentation:
 http://127.0.0.1:8000/docs
 ```
 
----
-
-## Docker Deployment
-
-Build the Docker image:
-
-```bash
-docker build -t enterprise-knowledge-intelligence:1.0 .
-```
-
-Run the container:
-
-```bash
-docker run --rm \
-  --name enterprise-knowledge-api \
-  --env-file .env \
-  -p 8000:8000 \
-  enterprise-knowledge-intelligence:1.0
-```
-
-The container initializes the retrieval stack and serves the FastAPI application on port `8000`.
-
----
-
-## Testing
-
-Run the complete automated test suite:
-
-```bash
-pytest
-```
-
-Current test suite:
+Health endpoint:
 
 ```text
-71 tests
+http://127.0.0.1:8000/api/v1/health
 ```
 
-Run static code-quality checks:
+Readiness endpoint:
+
+```text
+http://127.0.0.1:8000/api/v1/ready
+```
+
+---
+
+## Run the End-to-End Benchmark
 
 ```bash
-ruff check app tests scripts
+python scripts/run_rag_benchmark.py
 ```
 
----
-
-## Continuous Integration
-
-GitHub Actions automatically executes the CI pipeline on pushes and pull requests to `main`.
-
-The pipeline performs:
+The benchmark report is written to:
 
 ```text
-Repository Checkout
-        ?
-Python 3.12 Setup
-        ?
-Dependency Installation
-        ?
-Ruff Static Analysis
-        ?
-Pytest Test Suite
+reports/rag_benchmark_report.json
 ```
-
-A failed lint check or automated test causes the CI workflow to fail.
 
 ---
 
-## Project Structure
+## Key Engineering Decisions
+
+### Dense Retrieval over BM25
+
+BM25 performed significantly worse on difficult semantic enterprise questions.
+
+Dense retrieval provided stronger semantic matching.
+
+---
+
+### Cross-Encoder Reranking
+
+Cross-encoder reranking improved both Recall@1 and MRR@5 over dense retrieval alone.
+
+This led to the final:
 
 ```text
-enterprise-knowledge-intelligence/
-�
-+-- app/
-�   +-- agent/
-�   +-- api/
-�   +-- chunking/
-�   +-- core/
-�   +-- embeddings/
-�   +-- evaluation/
-�   +-- generation/
-�   +-- ingestion/
-�   +-- retrieval/
-�   +-- vectorstore/
-�
-+-- data/
-�   +-- raw/
-�   +-- evaluation/
-�   +-- vectorstore/
-�
-+-- notebooks/
-�
-+-- reports/
-�   +-- figures/
-�
-+-- scripts/
-�   +-- build_vectorstore.py
-�   +-- run_rag_benchmark.py
-�
-+-- tests/
-�
-+-- .github/
-�   +-- workflows/
-�       +-- ci.yml
-�
-+-- Dockerfile
-+-- .dockerignore
-+-- .gitignore
-+-- pyproject.toml
-+-- README.md
+Dense Top-10
+      ↓
+Cross-Encoder
+      ↓
+Top-3 Evidence
 ```
 
+configuration.
+
 ---
-
-## Engineering Decisions
-
-Several design decisions were determined experimentally rather than assumed.
-
-### Dense Retrieval vs Hybrid Search
-
-BM25 and hybrid reciprocal-rank fusion were evaluated against dense semantic retrieval.
-
-Dense retrieval performed better on the difficult enterprise semantic-query benchmark.
 
 ### Candidate Pool Optimization
 
-Increasing the reranking candidate pool from:
+The reranking candidate pool was experimentally increased from:
 
 ```text
-5 ? 10
+5 → 10
 ```
 
-recovered relevant evidence that had previously been missed before reranking.
-
-### Evidence Calibration
-
-The evidence evaluator was calibrated to judge whether the available sources answer the **actual level of detail requested by the user**, while continuing to reject unsupported specific facts.
-
-This improved supported-query coverage without weakening unsupported-query abstention.
+This recovered relevant policy evidence that had previously been excluded before reranking.
 
 ---
 
-## Security and Reliability
+### Evidence-Level Calibration
 
-The system incorporates several safeguards:
+The evidence evaluator was calibrated to judge sufficiency according to the actual level of detail requested by the user.
 
-- API keys are excluded from source control
-- Source documents are treated as evidence rather than instructions
-- Retrieved content cannot override system instructions
-- Unsupported questions trigger abstention
-- Generated citation numbers are validated
-- API logs avoid recording complete user questions and answers
-- Vector indexes are reproducibly generated rather than committed
-- Automated tests validate core system behavior
+This allowed general policy questions to be answered from general supporting requirements while continuing to reject unsupported specific facts.
 
 ---
 
-## Project Goal
+### Explicit Abstention
 
-This project demonstrates production-oriented skills relevant to:
+The system does not assume that every user question should receive an answer.
+
+When evidence is insufficient:
+
+```text
+No grounded answer
+No fabricated policy
+No fabricated citation
+```
+
+The platform returns an explicit abstention response.
+
+---
+
+## Security & Reliability Considerations
+
+The project incorporates several safeguards:
+
+- OpenAI API keys are excluded from source control
+- `.env` is ignored by Git and Docker
+- retrieved documents are treated as evidence rather than instructions
+- document content cannot override system behavior
+- unsupported questions trigger abstention
+- generated source numbers are validated
+- API error responses do not expose internal exception details
+- full user questions and generated answers are not written to application logs
+- vector indexes are reproducibly generated rather than committed
+- automated tests validate core system behavior
+- CI automatically verifies linting and tests
+
+---
+
+## What This Project Demonstrates
+
+This project demonstrates practical skills relevant to:
 
 - AI Engineer
 - Generative AI Engineer
-- Machine Learning Engineer
 - LLM Engineer
+- Machine Learning Engineer
 - Applied AI Engineer
 - Backend AI Engineer
 
-It focuses not only on LLM generation, but also on retrieval quality, grounding, evaluation, observability, testing, API engineering, containerization, and deployment practices.
+The project goes beyond basic LLM API usage by implementing:
+
+```text
+Document Intelligence
+        +
+Semantic Retrieval
+        +
+Reranking
+        +
+Evidence Validation
+        +
+Agentic Orchestration
+        +
+Grounded Generation
+        +
+Citation Validation
+        +
+Abstention
+        +
+Evaluation
+        +
+API Engineering
+        +
+Docker
+        +
+Automated Testing
+        +
+CI/CD
+```
+
+---
+
+## Repository
+
+GitHub:
+
+[HANUMANTHTHOPURI/enterprise-knowledge-intelligence](https://github.com/HANUMANTHTHOPURI/enterprise-knowledge-intelligence)
 
 ---
 
